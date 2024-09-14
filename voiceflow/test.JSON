@@ -1,0 +1,50 @@
+[
+    {
+        "joint": "left_shoulder_11",
+        "good_or_adjust": "good"
+    },
+    {
+        "joint": "right_shoulder_12",
+        "good_or_adjust": "adjust"
+    },
+    {
+        "joint": "left_elbow_13",
+        "good_or_adjust": "adjust"
+    },
+    {
+        "joint": "right_elbow_14",
+        "good_or_adjust": "good"
+    },
+    {
+        "joint": "left_wrist_15",
+        "good_or_adjust": "adjust"
+    },
+    {
+        "joint": "right_wrist_16",
+        "good_or_adjust": "adjust"
+    },
+    {
+        "joint": "left_hip_23",
+        "good_or_adjust": "adjust"
+    },
+    {
+        "joint": "right_hip_24",
+        "good_or_adjust": "adjust"
+    },
+    {
+        "joint": "left_knee_25",
+        "good_or_adjust": "good"
+    },
+    {
+        "joint": "right_knee_26",
+        "good_or_adjust": "good"
+    },
+    {
+        "joint": "left_ankle_27",
+        "good_or_adjust": "good"
+    },
+    {
+        "joint": "right_ankle_28",
+        "good_or_adjust": "good"
+    }
+]
