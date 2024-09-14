@@ -27,7 +27,7 @@ export const similarExercises = action({
     const { embedding } = args; // Extracting args to use them
     
     // Assuming embedding is already processed and ready for use
-    const body_location = "Elbow"; // cohere.chat();
+    const body_location = "Hip"; // cohere.chat();
     
     // 2. Then search for similar exercises!
     const results = await ctx.vectorSearch("exercises", "by_embedding", {
