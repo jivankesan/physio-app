@@ -27,7 +27,13 @@ descriptions = [
     "Elbow curl, medium difficulty, band",
     "Elbow curl, hard difficulty, gym equipment",
     "Elbow curl, easy difficulty, table",
-    "Elbow overhead, hard difficulty, weight"
+    "Elbow overhead, hard difficulty, weight",
+    "Wrist rotation, easy difficulty, no equipment",
+    "Wrist spin, easy difficulty, no equipment",
+    "Wrist flex, easy difficulty, no equipment",
+    "Calf stretch, easy difficulty, block",
+    "Calf sit raise, hard difficulty, weight and bar",
+    "Calf standing stretch, easy difficulty, no equipment"
 ]
 
 def get_embeddings(texts, model='embed-english-v2.0'):
