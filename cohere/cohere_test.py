@@ -6,7 +6,7 @@ from sklearn.metrics.pairwise import cosine_similarity
 from sklearn.cluster import KMeans
 import cohere
 
-co = cohere.Client("Your_API_key") # Your Cohere API key
+co = cohere.Client("YourAPIkey") # Your Cohere API key
 
 descriptions = [
     "Thigh lunge, medium difficulty, no equipment",
