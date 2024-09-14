@@ -16,6 +16,7 @@ import {
 import { SearchIcon } from "@chakra-ui/icons";
 import { useRouter } from "next/navigation"; // Use Next.js router
 import { CohereClient } from "cohere-ai";
+import Typewriter from 'typewriter-effect'; 
 
 const cohere = new CohereClient({
   token: "aJj0xHpb5VNBR6yWsnJxLffGM4dVVVLEkXhJjYpT",
@@ -90,8 +91,22 @@ export default function SearchForm() {
     <Center bg="#E2E8F0" p="4" minH="100vh">
       <Flex direction="column" alignItems="center" gap="8">
         <Text fontSize="4xl" fontWeight="bold">
-          My Physio
+          Physioflow
         </Text>
+        <Typewriter 
+        onInit={(typewriter) => { 
+          typewriter.typeString('Welcome to Physioflow, physiotherapy from the comfort of your home!') 
+            .callFunction(() => { 
+              console.log('String typed out!'); 
+            }) 
+            .pauseFor(2500) 
+            .deleteAll() 
+            .callFunction(() => { 
+              console.log('All strings were deleted'); 
+            }) 
+            .start(); 
+        }} 
+      />
         <form onSubmit={handleSubmit}>
           <Flex direction="column" alignItems="center" gap="4">
             <Flex alignItems="center" gap="4">
