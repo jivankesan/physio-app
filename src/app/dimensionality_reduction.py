@@ -13,8 +13,18 @@ class EmbeddingRequest(BaseModel):
 async def reduce_dimensions(request: EmbeddingRequest):
     embeddings = np.array(request.embeddings)
     
-    # Use PCA to reduce dimensions (example: from 1024 to 128)
-    pca = PCA(n_components=128)
+
+    def apply_pca(embeddings, n_components=None):
+        embeddings = np.array(embeddings)  # Convert to NumPy array
+        if n_components is None:
+            # Maximum number of components is min(number of samples - 1, number of features)
+            n_components = min(embeddings.shape[0] - 1, embeddings.shape[1])
+        pca = PCA(n_components=n_components)
+        reduced_embeddings = pca.fit_transform(embeddings)
+        return reduced_embeddings
+
+    reduced_embeddings= apply_pca(embeddings, n_components=24)
+    pca = PCA(n_components=24)
     reduced_embeddings = pca.fit_transform(embeddings)
     
     return {"reduced_embeddings": reduced_embeddings.tolist()}
