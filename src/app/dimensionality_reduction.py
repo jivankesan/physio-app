@@ -3,8 +3,18 @@ from fastapi import FastAPI
 from pydantic import BaseModel
 from sklearn.decomposition import PCA
 import numpy as np
+from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
+
+# Add CORS middleware
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:3000"],  # Adjust this to your client origin for production
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 class EmbeddingRequest(BaseModel):
     embeddings: list[list[float]]
@@ -12,19 +22,9 @@ class EmbeddingRequest(BaseModel):
 @app.post("/reduce_dimensions")
 async def reduce_dimensions(request: EmbeddingRequest):
     embeddings = np.array(request.embeddings)
-    
+    projection_matrix = np.random.rand(384, 24)
 
-    def apply_pca(embeddings, n_components=None):
-        embeddings = np.array(embeddings)  # Convert to NumPy array
-        if n_components is None:
-            # Maximum number of components is min(number of samples - 1, number of features)
-            n_components = min(embeddings.shape[0] - 1, embeddings.shape[1])
-        pca = PCA(n_components=n_components)
-        reduced_embeddings = pca.fit_transform(embeddings)
-        return reduced_embeddings
-
-    reduced_embeddings= apply_pca(embeddings, n_components=24)
-    pca = PCA(n_components=24)
-    reduced_embeddings = pca.fit_transform(embeddings)
+# Reduce dimensions by multiplying the embedding with the projection matrix
+    reduced_embedding = np.dot(embeddings, projection_matrix)
     
-    return {"reduced_embeddings": reduced_embeddings.tolist()}
+    return {"reduced_embeddings": reduced_embedding.tolist()}

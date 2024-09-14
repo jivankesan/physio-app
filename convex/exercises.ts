@@ -2,11 +2,7 @@ import { v } from "convex/values";
 import { action, internalQuery, query} from "./_generated/server";
 import { internal } from "./_generated/api";
 import { Doc } from "./_generated/dataModel";
-import { CohereClient } from "cohere-ai";
 
-const cohere = new CohereClient({
-  token: "aJj0xHpb5VNBR6yWsnJxLffGM4dVVVLEkXhJjYpT",
-});
 
 export const fetchResults = internalQuery({
   args: { ids: v.array(v.id("exercises")) },
@@ -25,16 +21,18 @@ export const fetchResults = internalQuery({
 
 export const similarExercises = action({
   args: {
-    descriptionQuery: v.string(),
+    embedding: v.array(v.float64()),
   },
   handler: async (ctx, args) => {
+    const { embedding } = args; // Extracting args to use them
     
-    const embedding = await cohere.embed({texts: [args.descriptionQuery], model:'embed-english-light-v3.0', inputType: 'classification' }) as { embeddings: number[][]};
+    // Assuming embedding is already processed and ready for use
     const body_location = "Elbow"; // cohere.chat();
-    // 2. Then search for similar foods!
+    
+    // 2. Then search for similar exercises!
     const results = await ctx.vectorSearch("exercises", "by_embedding", {
-      vector: embedding["embeddings"][0],
-      limit: 16,
+      vector: embedding, 
+      limit: 4,
       filter: (q) => q.eq("body_location", body_location ),
     });
     // 3. Fetch the results

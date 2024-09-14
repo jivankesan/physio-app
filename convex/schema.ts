@@ -6,10 +6,10 @@ export default defineSchema({
     description: v.string(),
     file_path: v.string(),
     body_location: v.string(),
-    embedding: v.array(v.float64()),
+    embedding: v.array(v.number()),
   }).vectorIndex("by_embedding", {
     vectorField: "embedding",
-    dimensions: 384,
+    dimensions: 24,
     filterFields: ["body_location"],
   }),
   exercisesList: defineTable({

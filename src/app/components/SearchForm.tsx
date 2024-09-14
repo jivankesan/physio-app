@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useAction, useMutation } from "convex/react";
 import { api } from "../../../convex/_generated/api";
+// import { v } from "convex/values";
 import {
   Center,
   Flex,
@@ -14,6 +15,11 @@ import {
 } from "@chakra-ui/react";
 import { SearchIcon } from "@chakra-ui/icons";
 import { useRouter } from "next/navigation"; // Use Next.js router
+import { CohereClient } from "cohere-ai";
+
+const cohere = new CohereClient({
+  token: "aJj0xHpb5VNBR6yWsnJxLffGM4dVVVLEkXhJjYpT",
+});
 
 export default function SearchForm() {
   const router = useRouter();
@@ -27,8 +33,30 @@ export default function SearchForm() {
     e.preventDefault();
     setLoading(true);
 
+    console.log("entered here");
+    const embed = await cohere.embed({
+      texts: [userPrompt],
+      model: "embed-english-light-v3.0",
+      inputType: "classification",
+    });
+
+    async function reduceDimensions(embeddings: number[][]) {
+      const response = await fetch("http://localhost:8000/reduce_dimensions", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ embeddings }),
+      });
+      const data = await response.json();
+      return data.reduced_embeddings;
+    }
+    const reducedEmbeddings = await reduceDimensions(
+      embed.embeddings as number[][]
+    ); // Cast to number[][]
+    console.log("Data type of reduced embeddings: ", typeof reducedEmbeddings);
     const exercises = await findSimilarExercises({
-      descriptionQuery: userPrompt,
+      embedding: reducedEmbeddings[0], // Assign reduced embeddings here
     });
 
     if (exercises && exercises.length > 0 && exercises[0]?.body_location) {
