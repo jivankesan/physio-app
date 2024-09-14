@@ -1,11 +1,26 @@
 import { v } from "convex/values";
-import { action} from "./_generated/server";
+import { action, internalQuery, query} from "./_generated/server";
 import { internal } from "./_generated/api";
 import { Doc } from "./_generated/dataModel";
 import { CohereClient } from "cohere-ai";
 
 const cohere = new CohereClient({
   token: "aJj0xHpb5VNBR6yWsnJxLffGM4dVVVLEkXhJjYpT",
+});
+
+export const fetchResults = internalQuery({
+  args: { ids: v.array(v.id("exercises")) },
+  handler: async (ctx, args) => {
+    const results = [];
+    for (const id of args.ids) {
+      const doc = await ctx.db.get(id);
+      if (doc === null) {
+        continue;
+      }
+      results.push(doc);
+    }
+    return results;
+  },
 });
 
 export const similarExercises = action({
@@ -28,5 +43,27 @@ export const similarExercises = action({
       { ids: results.map((result) => result._id) },
     );
     return exercises;
+  },
+});
+
+export const getExercisesByIds = query({
+  args: { exerciseIds: v.array(v.id("exercises")) },
+  handler: async (ctx, args) => {
+    const { exerciseIds } = args;
+    if (!exerciseIds || exerciseIds.length === 0) {
+      return [];
+    }
+    const exercises = await Promise.all(exerciseIds.map(id => ctx.db.get(id)));
+    return exercises.filter((exercise) => exercise !== null);
+  },
+});
+
+// Internal query to get a single exercise by ID
+export const getExerciseById = query({
+  args: { exerciseId: v.id("exercises") },
+  handler: async (ctx, args) => {
+    const { exerciseId } = args;
+    const exercise = await ctx.db.get(exerciseId);
+    return exercise || null;
   },
 });
