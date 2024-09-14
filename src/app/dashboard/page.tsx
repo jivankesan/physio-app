@@ -10,6 +10,7 @@ import {
   Image,
   Badge,
   Stack,
+  Button,
   Center,
   Spinner,
   useColorModeValue,
@@ -39,6 +40,10 @@ export default function DashboardPage() {
 
   const bg = useColorModeValue("#F9FAFB", "#1A202C");
 
+  const handleStartTraining = (exerciseId: string) => {
+    router.push(`/treatment?exerciseId=${exerciseId}`);
+  };
+
   if (!exercisesList || !exercises) {
     return (
       <Center minH="100vh">
@@ -59,50 +64,51 @@ export default function DashboardPage() {
         Dashboard - {bodyLocation}
       </Heading>
 
-      {exercises && exercises.length > 0 ? ( // Check if exercises is defined
+      {exercises.length > 0 ? (
         <SimpleGrid columns={[1, 2, 3]} spacing={8}>
-          {exercises.map(
-            (
-              exercise // Removed optional chaining
-            ) => (
-              <Card
-                key={exercise._id}
-                borderRadius="lg"
-                overflow="hidden"
-                cursor="pointer"
-                onClick={() =>
-                  router.push(`/treatment?exerciseId=${exercise._id}`)
-                }
-                bg="#FFFFFF"
-                boxShadow="0 1px 3px rgba(0, 0, 0, 0.1)"
-                transition="all 0.3s"
-                _hover={{
-                  transform: "scale(1.02)",
-                  boxShadow: "0 8px 16px rgba(0, 0, 0, 0.2)",
-                }}
-              >
-                <Image
-                  src={exercise.file_path}
-                  alt={exercise.description}
-                  objectFit="cover"
-                  height="200px"
-                  width="100%"
-                  borderRadius="8px 8px 0 0"
-                />
-                <CardBody p={6}>
-                  <Stack spacing={3}>
-                    <Text fontWeight="bold" fontSize="xl" color="#3B3B4F">
-                      {exercise.description}
-                    </Text>
-                    <Text color="#6B7280">{exercise.description}</Text>
-                    <Badge colorScheme="blue" alignSelf="start">
-                      {bodyLocation}
-                    </Badge>
-                  </Stack>
-                </CardBody>
-              </Card>
-            )
-          )}
+          {exercises.map((exercise) => (
+            <Card
+              key={exercise._id}
+              borderRadius="lg"
+              overflow="hidden"
+              cursor="pointer"
+              bg="#FFFFFF"
+              boxShadow="0 1px 3px rgba(0, 0, 0, 0.1)"
+              transition="all 0.3s"
+              _hover={{
+                transform: "scale(1.02)",
+                boxShadow: "0 8px 16px rgba(0, 0, 0, 0.2)",
+              }}
+            >
+              <Image
+                src={exercise.file_path}
+                alt={exercise.description}
+                objectFit="cover"
+                height="200px"
+                width="100%"
+                borderRadius="8px 8px 0 0"
+              />
+              <CardBody p={6}>
+                <Stack spacing={3}>
+                  <Text fontWeight="bold" fontSize="xl" color="#3B3B4F">
+                    {exercise.description}
+                  </Text>
+                  <Text color="#6B7280">{exercise.description}</Text>
+                  <Badge colorScheme="blue" alignSelf="start">
+                    {bodyLocation}
+                  </Badge>
+                  {/* Start Training Button */}
+                  <Button
+                    mt={4}
+                    colorScheme="teal"
+                    onClick={() => handleStartTraining(exercise._id)}
+                  >
+                    Start Training
+                  </Button>
+                </Stack>
+              </CardBody>
+            </Card>
+          ))}
         </SimpleGrid>
       ) : (
         <Text color="#6B7280">No exercises found yet</Text>

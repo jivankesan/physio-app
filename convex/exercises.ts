@@ -30,7 +30,7 @@ export const similarExercises = action({
   handler: async (ctx, args) => {
     
     const embedding = await cohere.embed({texts: [args.descriptionQuery], model:'embed-english-light-v3.0', inputType: 'classification' }) as { embeddings: number[][]};
-    const body_location = "elbow"; // cohere.chat();
+    const body_location = "Elbow"; // cohere.chat();
     // 2. Then search for similar foods!
     const results = await ctx.vectorSearch("exercises", "by_embedding", {
       vector: embedding["embeddings"][0],
