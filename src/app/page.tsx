@@ -1,13 +1,20 @@
 "use client";
 
-import { useQuery } from "convex/react";
-import { api } from "../../convex/_generated/api";
+import { useState } from "react";
+import DashboardPage from "./dashboard/page";
+import SearchForm from "./components/SearchForm";
 
-export default function Home() {
-  const tasks = useQuery(api.tasks.get);
+export default function AppLayout() {
+  const [bodyLocation, setBodyLocation] = useState("");
+
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      {tasks?.map(({ _id, text }) => <div key={_id}>{text}</div>)}
-    </main>
+    <div>
+      <h1>Physiotherapy Treatment App</h1>
+      {/* Pass setBodyLocation to SearchForm to update the state when a search is submitted */}
+      <SearchForm setBodyLocation={setBodyLocation} />
+
+      {/* Conditionally render DashboardPage only when a search has been performed */}
+      {bodyLocation && <DashboardPage bodyLocation={bodyLocation} />}
+    </div>
   );
 }
