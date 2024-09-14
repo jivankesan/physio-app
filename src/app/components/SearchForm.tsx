@@ -40,6 +40,14 @@ export default function SearchForm() {
       inputType: "classification",
     });
 
+    const body_location = await cohere.chat({
+      message: `Give me a single word answer, given the user's input, choose from this list what part of their body they are looking for physio with: Calf, Wrist, Elbow, Shoulder, Hip, Wrist, Thigh ${userPrompt}. Do NOT INCLUDE ANY punctuation except for making the first letter capital`,
+    });
+
+    console.log(body_location);
+
+    body_location["text"].replace(/['.]/g, "");
+
     async function reduceDimensions(embeddings: number[][]) {
       const response = await fetch("http://localhost:8000/reduce_dimensions", {
         method: "POST",
@@ -56,7 +64,8 @@ export default function SearchForm() {
     ); // Cast to number[][]
     console.log("Data type of reduced embeddings: ", typeof reducedEmbeddings);
     const exercises = await findSimilarExercises({
-      embedding: reducedEmbeddings[0], // Assign reduced embeddings here
+      embedding: reducedEmbeddings[0],
+      body_location: body_location["text"],
     });
 
     if (exercises && exercises.length > 0 && exercises[0]?.body_location) {

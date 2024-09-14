@@ -22,18 +22,22 @@ export const fetchResults = internalQuery({
 export const similarExercises = action({
   args: {
     embedding: v.array(v.float64()),
+    body_location: v.string(),
   },
   handler: async (ctx, args) => {
-    const { embedding } = args; // Extracting args to use them
+    const {  body_location, embedding } = args; // Extracting args to use them
     
     // Assuming embedding is already processed and ready for use
-    const body_location = "Hip"; // cohere.chat();
+    const location = body_location; // cohere.chat();
+    const n_location = "Hip";
+    console.log(location)
+    console.log(n_location)
     
     // 2. Then search for similar exercises!
     const results = await ctx.vectorSearch("exercises", "by_embedding", {
       vector: embedding, 
       limit: 4,
-      filter: (q) => q.eq("body_location", body_location ),
+      filter: (q) => q.eq("body_location", location ),
     });
     // 3. Fetch the results
     const exercises: Array<Doc<"exercises">> = await ctx.runQuery(
