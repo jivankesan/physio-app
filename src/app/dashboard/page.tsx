@@ -38,7 +38,7 @@ export default function DashboardPage() {
     exerciseIds,
   });
 
-  const bg = useColorModeValue("#F9FAFB", "#1A202C");
+  const bg = useColorModeValue("#f1f8ff", "#f1f8ff");
 
   const handleStartTraining = (exerciseId: string) => {
     router.push(`/treatment?exerciseId=${exerciseId}`);

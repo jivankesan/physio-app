@@ -16,7 +16,8 @@ import {
 import { SearchIcon } from "@chakra-ui/icons";
 import { useRouter } from "next/navigation"; // Use Next.js router
 import { CohereClient } from "cohere-ai";
-import Typewriter from 'typewriter-effect'; 
+import Typewriter from 'typewriter-effect';
+import Image from 'next/image';
 
 const cohere = new CohereClient({
   token: "aJj0xHpb5VNBR6yWsnJxLffGM4dVVVLEkXhJjYpT",
@@ -88,8 +89,15 @@ export default function SearchForm() {
   };
 
   return (
-    <Center bg="#E2E8F0" p="4" minH="100vh">
-      <Flex direction="column" alignItems="center" gap="8">
+    <Center p="4" minH="100vh" position="relative">
+        <Image //Currently not working, and missing public directory to move image fix
+          src="/searchpage_media/physioflow-background.png" 
+          alt="Background" 
+          layout="fill"
+          objectFit="cover"
+          style={{ zIndex: -1 }}
+        />
+        <Flex direction="column" alignItems="center" gap="8">
         <Text fontSize="4xl" fontWeight="bold">
           Physioflow
         </Text>
