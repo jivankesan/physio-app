@@ -6,7 +6,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from PIL import Image
 import io
 import json
-from mediapipe.pose_wrapper import PoseAngleAnalyzer
+from media.pose_wrapper import PoseAngleAnalyzer
 
 
 app = FastAPI()
@@ -70,4 +70,4 @@ async def process_frame_buffer(request: Request):
         feedback_frame = {joint_name: feedback for joint_name, feedback in zip(analyzer.joint_names, joint_feedback)}
         feedback_data.append(feedback_frame)
 
-    return JSONResponse(content={"feedback_data": feedback_data, "message": "Images processed successfully"})
+    return JSONResponse(content={"feedback_data": "feedback_data", "message": "Images processed successfully"})
