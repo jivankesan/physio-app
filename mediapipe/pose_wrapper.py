@@ -126,48 +126,22 @@ class PoseAngleAnalyzer:
             json.dump(self.latest_feedback, json_file, indent=4)
 
 # Usage example
-def main():
+def main(frames, reference_angles):
     analyzer = PoseAngleAnalyzer()
+    analyzer.reference_angles = reference_angles
 
-    # Process the reference video
-    reference_video_path = '../exercise_videos/thigh_squat.mp4'
-    analyzer.process_video(reference_video_path)
+    feedback_data = []
 
-    # Open the live stream and process each frame
-    cap = cv2.VideoCapture(0)
-    start_time = time.time()
-
-    while cap.isOpened():
-        success, frame = cap.read()
-        if not success:
-            break
-
+    for frame in frames:
         avg_live_angles, results = analyzer.process_live_frame(frame)
         joint_feedback = analyzer.compare_with_reference(avg_live_angles)
 
-        # Store the feedback data of the current frame
-        analyzer.latest_feedback = {joint_name: feedback for joint_name, feedback in zip(analyzer.joint_names, joint_feedback)}
+        # Store the feedback data of the current frame in a JSON structure
+        feedback_frame = {joint_name: feedback for joint_name, feedback in zip(analyzer.joint_names, joint_feedback)}
+        feedback_data.append(feedback_frame)
 
-        # Every two seconds, save the latest feedback to a JSON file
-        if time.time() - start_time >= 2:
-            analyzer.save_feedback_to_json()
-            start_time = time.time()  # Reset the timer
+    return feedback_data
 
-        # Display feedback for each joint
-        frame.flags.writeable = True  # Make frame writable to draw on it
-        for idx, feedback in enumerate(joint_feedback):
-            joint_name = analyzer.joint_names[idx]
-            color = (0, 255, 0) if feedback == "Good" else (0, 0, 255)
-            cv2.putText(frame, f'{joint_name}: {feedback}', (10, 30 + idx * 20), cv2.FONT_HERSHEY_SIMPLEX, 0.5, color, 1, cv2.LINE_AA)
-
-        mp_drawing.draw_landmarks(frame, results.pose_landmarks, mp_pose.POSE_CONNECTIONS)
-        cv2.imshow('Live Stream', frame)
-
-        if cv2.waitKey(5) & 0xFF == 27:
-            break
-
-    cap.release()
-    cv2.destroyAllWindows()
 
 if __name__ == "__main__":
     main()

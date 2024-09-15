@@ -16,8 +16,8 @@ import {
 import { SearchIcon } from "@chakra-ui/icons";
 import { useRouter } from "next/navigation"; // Use Next.js router
 import { CohereClient } from "cohere-ai";
-import Typewriter from 'typewriter-effect';
-import Image from 'next/image';
+import Typewriter from "typewriter-effect";
+import Image from "next/image";
 
 const cohere = new CohereClient({
   token: "aJj0xHpb5VNBR6yWsnJxLffGM4dVVVLEkXhJjYpT",
@@ -90,31 +90,34 @@ export default function SearchForm() {
 
   return (
     <Center p="4" minH="100vh" position="relative">
-        <Image //Currently not working, and missing public directory to move image fix
-          src="/searchpage_media/physioflow-background.png" 
-          alt="Background" 
-          layout="fill"
-          objectFit="cover"
-          style={{ zIndex: -1 }}
-        />
-        <Flex direction="column" alignItems="center" gap="8">
+      <Image //Currently not working, and missing public directory to move image fix
+        src="/searchpage_media/physioflow-background.png"
+        alt="Background"
+        layout="fill"
+        objectFit="cover"
+        style={{ zIndex: -1 }}
+      />
+      <Flex direction="column" alignItems="center" gap="8">
         <Text fontSize="4xl" fontWeight="bold">
           Physioflow
         </Text>
-        <Typewriter 
-        onInit={(typewriter) => { 
-          typewriter.typeString('Welcome to Physioflow, physiotherapy from the comfort of your home!') 
-            .callFunction(() => { 
-              console.log('String typed out!'); 
-            }) 
-            .pauseFor(2500) 
-            .deleteAll() 
-            .callFunction(() => { 
-              console.log('All strings were deleted'); 
-            }) 
-            .start(); 
-        }} 
-      />
+        <Typewriter
+          onInit={(typewriter) => {
+            typewriter
+              .typeString(
+                "Welcome to Physioflow, physiotherapy from the comfort of your home!"
+              )
+              .callFunction(() => {
+                console.log("String typed out!");
+              })
+              .pauseFor(2500)
+              .deleteAll()
+              .callFunction(() => {
+                console.log("All strings were deleted");
+              })
+              .start();
+          }}
+        />
         <form onSubmit={handleSubmit}>
           <Flex direction="column" alignItems="center" gap="4">
             <Flex alignItems="center" gap="4">

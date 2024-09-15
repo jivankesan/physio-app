@@ -5,7 +5,6 @@ import numpy as np
 from fastapi.middleware.cors import CORSMiddleware
 from PIL import Image
 import io
-import cv2
 import json
 from mediapipe.pose_wrapper import PoseAngleAnalyzer
 
@@ -57,8 +56,18 @@ async def process_frame_buffer(request: Request):
 
     if 'ref_angle' in form:
         ref_angle = json.loads(form['ref_angle'])
-    
-    
-    
+        
+    analyzer = PoseAngleAnalyzer()
+    analyzer.reference_angles = ref_angle
 
-    return JSONResponse(content={"message": "Images processed successfully"})
+    feedback_data = []
+
+    for frame in images:
+        avg_live_angles, results = analyzer.process_live_frame(frame)
+        joint_feedback = analyzer.compare_with_reference(avg_live_angles)
+
+        # Store the feedback data of the current frame in a JSON structure
+        feedback_frame = {joint_name: feedback for joint_name, feedback in zip(analyzer.joint_names, joint_feedback)}
+        feedback_data.append(feedback_frame)
+
+    return JSONResponse(content={"feedback_data": feedback_data, "message": "Images processed successfully"})
