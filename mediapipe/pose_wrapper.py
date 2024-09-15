@@ -1,6 +1,8 @@
 import cv2
 import mediapipe as mp
 import numpy as np
+import json
+import time
 from collections import deque
 
 mp_drawing = mp.solutions.drawing_utils
@@ -17,6 +19,7 @@ class PoseAngleAnalyzer:
             'Left Hip', 'Right Hip', 'Left Knee', 'Right Knee',
             'Left Wrist', 'Right Wrist', 'Left Ankle', 'Right Ankle'
         ]
+        self.latest_feedback = {}  # Store the latest feedback for JSON output
 
     def calculate_angle(self, a, b, c):
         a = np.array(a)
@@ -115,6 +118,13 @@ class PoseAngleAnalyzer:
 
         return feedback
 
+    def save_feedback_to_json(self):
+        timestamp = time.strftime("%Y%m%d-%H%M%S")
+        json_filename = f'feedback_{timestamp}.json'
+        
+        with open(json_filename, 'w') as json_file:
+            json.dump(self.latest_feedback, json_file, indent=4)
+
 # Usage example
 def main():
     analyzer = PoseAngleAnalyzer()
@@ -125,6 +135,7 @@ def main():
 
     # Open the live stream and process each frame
     cap = cv2.VideoCapture(0)
+    start_time = time.time()
 
     while cap.isOpened():
         success, frame = cap.read()
@@ -133,6 +144,14 @@ def main():
 
         avg_live_angles, results = analyzer.process_live_frame(frame)
         joint_feedback = analyzer.compare_with_reference(avg_live_angles)
+
+        # Store the feedback data of the current frame
+        analyzer.latest_feedback = {joint_name: feedback for joint_name, feedback in zip(analyzer.joint_names, joint_feedback)}
+
+        # Every two seconds, save the latest feedback to a JSON file
+        if time.time() - start_time >= 2:
+            analyzer.save_feedback_to_json()
+            start_time = time.time()  # Reset the timer
 
         # Display feedback for each joint
         frame.flags.writeable = True  # Make frame writable to draw on it
