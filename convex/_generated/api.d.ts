@@ -17,6 +17,7 @@ import type {
 } from "convex/server";
 import type * as exercises from "../exercises.js";
 import type * as exercisesList from "../exercisesList.js";
+import type * as getData from "../getData.js";
 import type * as treatmentPlans from "../treatmentPlans.js";
 
 /**
@@ -30,6 +31,7 @@ import type * as treatmentPlans from "../treatmentPlans.js";
 declare const fullApi: ApiFromModules<{
   exercises: typeof exercises;
   exercisesList: typeof exercisesList;
+  getData: typeof getData;
   treatmentPlans: typeof treatmentPlans;
 }>;
 export declare const api: FilterApi<
