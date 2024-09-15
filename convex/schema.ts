@@ -7,6 +7,7 @@ export default defineSchema({
     file_path: v.string(),
     body_location: v.string(),
     embedding: v.array(v.number()),
+    ref_angle: v.array(v.array(v.number())),
   }).vectorIndex("by_embedding", {
     vectorField: "embedding",
     dimensions: 24,

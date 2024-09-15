@@ -135,6 +135,10 @@ export default function TreatmentPage() {
         formData.append(`file_${index}`, blob, `frame_${index}.jpg`);
       });
 
+      // Example ref_angle data
+      const refr_angle = exercise.ref_angle;
+      formData.append("ref_angle", JSON.stringify(refr_angle)); // Send as a JSON string
+
       try {
         const response = await fetch(
           "http://localhost:8000/process_frame_buffer",
